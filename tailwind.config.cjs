@@ -1,10 +1,7 @@
 module.exports = {
   content: [
     './index.html',
-    './App.tsx',
-    './index.tsx',
-    './components/**/*.{ts,tsx}',
-    './hooks/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
   ],
   darkMode: 'class',
   theme: {
