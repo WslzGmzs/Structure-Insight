@@ -1,5 +1,14 @@
 # Structure Insight
 
+[![版本](https://img.shields.io/badge/version-5.4.0-blue.svg)](./package.json)
+[![最新发布](https://img.shields.io/github/v/release/yeahhe365/Structure-Insight?label=release)](https://github.com/yeahhe365/Structure-Insight/releases)
+[![许可证：MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.4-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
+[![PWA](https://img.shields.io/badge/PWA-ready-5A0FC8.svg)](./public/manifest.json)
+[![在线体验](https://img.shields.io/badge/live-demo-2ea44f?logo=cloudflarepages&logoColor=white)](https://structure-insight-website.pages.dev/)
+
 [English](./README.md) | 简体中文
 
 Structure Insight 是一个优先在浏览器本地运行的代码仓库检查与导出工具。它可以帮助你加载本地项目、理解目录结构、筛选关键文件、检查潜在敏感信息，并在不把源代码上传到服务器的前提下生成干净的代码上下文快照。

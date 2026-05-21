@@ -1,5 +1,14 @@
 # Structure Insight
 
+[![Version](https://img.shields.io/badge/version-5.4.0-blue.svg)](./package.json)
+[![Latest Release](https://img.shields.io/github/v/release/yeahhe365/Structure-Insight?label=release)](https://github.com/yeahhe365/Structure-Insight/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.4-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
+[![PWA](https://img.shields.io/badge/PWA-ready-5A0FC8.svg)](./public/manifest.json)
+[![Live Demo](https://img.shields.io/badge/live-demo-2ea44f?logo=cloudflarepages&logoColor=white)](https://structure-insight-website.pages.dev/)
+
 English | [简体中文](./README.zh-CN.md)
 
 Structure Insight is a browser-first repository inspection and export tool for AI-assisted development. It helps you load a local project, understand its structure, filter the files that matter, review potential secrets, and export a clean codebase snapshot without uploading source files to a server.
