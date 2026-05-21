@@ -14,13 +14,18 @@ Structure Insight is a browser-first repository inspection and export tool for A
 - [Feature Overview](#feature-overview)
 - [Quick Start](#quick-start)
 - [Using The App](#using-the-app)
+- [Settings Reference](#settings-reference)
+- [Filtering Rules](#filtering-rules)
+- [Search And Navigation](#search-and-navigation)
 - [Export Formats](#export-formats)
 - [Privacy And Security](#privacy-and-security)
 - [Browser Support](#browser-support)
+- [Processing Details](#processing-details)
 - [Development](#development)
 - [Project Structure](#project-structure)
 - [Deployment](#deployment)
 - [Troubleshooting](#troubleshooting)
+- [Roadmap Notes](#roadmap-notes)
 - [Contributing](#contributing)
 
 ## Why Use It
@@ -101,6 +106,78 @@ npm run preview
 
 The app operates on the current in-browser view. If you edit or remove files inside Structure Insight, those changes affect the generated export, not the original project on disk.
 
+## Settings Reference
+
+### Workspace
+
+| Setting              | Details                                                                                                                    |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Theme mode           | Switches between light and dark UI themes.                                                                                 |
+| Font size            | Controls code and structure reading density from `10px` to `24px`.                                                         |
+| Word wrap            | Reduces horizontal scrolling in long code lines.                                                                           |
+| Extract file content | When disabled, the app generates a structure-first view without reading file bodies.                                       |
+| Large file threshold | Entered in KB. `0` disables the threshold. Files above the threshold are kept in the tree but skipped for body extraction. |
+| Clear cache          | Resets local settings, recent project data, app caches, and service worker registrations where the browser allows it.      |
+
+### Export
+
+| Setting             | Details                                                                                                                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| Export format       | Chooses `plain`, `markdown`, `xml`, or `json`.                                                                         |
+| File summary        | Adds repository-level metadata and usage notes near the top of the export.                                             |
+| Directory structure | Includes the generated tree in the export.                                                                             |
+| Show line numbers   | Prefixes exported file content as `line                                                                                | content`. Preview line numbers are unaffected. |
+| Remove empty lines  | Removes blank lines from exported file bodies before output is generated.                                              |
+| Truncate Base64     | Replaces long `data:*;base64,...` values with `data:[TRUNCATED_BASE64_DATA]`.                                          |
+| Split threshold     | `0` disables splitting. A positive character count saves files as `project.part1.ext`, `project.part2.ext`, and so on. |
+| Header text         | Prepended context for project background, review goals, or constraints.                                                |
+| Instruction text    | Extra downstream instructions, such as desired answer format or review priority.                                       |
+
+### Defaults
+
+- Default ignore rules: enabled.
+- Ignore-file support: enabled.
+- Empty directory export: disabled.
+- Export format: plain text.
+- Large file threshold: disabled with `0`.
+- Split export threshold: disabled with `0`.
+- Recent project limit: 5 projects.
+
+## Filtering Rules
+
+Filtering happens during processing and again when exports are rebuilt. The same rules are applied to the visible tree, file contents, empty directory handling, and exported context.
+
+- Include and ignore fields accept comma-separated glob patterns, for example `src/**/*.ts,docs/**`.
+- Pattern whitespace is trimmed; empty entries are ignored.
+- Patterns are tested against both the normalized full path and the path with the top-level project folder removed. This makes patterns like `src/**/*.ts` work whether the imported root folder name is present or not.
+- Include patterns are restrictive: when at least one include pattern is present, a file must match one of them.
+- Ignore patterns are subtractive: a matched ignore pattern excludes the file even if it also matched an include pattern.
+- Ignore files are discovered from `.gitignore`, `.ignore`, and `.repomixignore` files inside the imported project.
+- Default ignored directories include `.git`, `node_modules`, `__pycache__`, `.vscode`, `.idea`, `dist`, `build`, `out`, and `target`.
+- Binary and packaged asset extensions such as images, fonts, archives, executables, office documents, media files, and compiled outputs are kept in the tree but skipped for text extraction.
+- Standalone `.zip` files are expanded in the browser. `.zip` files that are already inside an imported folder are treated as regular files instead of being expanded recursively.
+
+## Search And Navigation
+
+- Use `Ctrl/⌘ + F` to open project search after a project is loaded.
+- Search supports case-sensitive matching, whole-word matching, and regular expressions.
+- Regular expression queries longer than 256 characters are rejected.
+- Regex patterns that can match an empty string are ignored to avoid infinite result loops.
+- Some nested-quantifier patterns are rejected to reduce catastrophic backtracking risk.
+- Search results include file path, match text, line number, and match index inside the file.
+- The file tree is virtualized, so large projects can be browsed without mounting every visible row at once.
+
+Keyboard shortcuts:
+
+| Shortcut     | Action                                                |
+| ------------ | ----------------------------------------------------- |
+| `Ctrl/⌘ + O` | Open a project                                        |
+| `Ctrl/⌘ + F` | Toggle search                                         |
+| `Ctrl/⌘ + S` | Save export                                           |
+| `Ctrl/⌘ + /` | Toggle keyboard shortcut help                         |
+| `Ctrl/⌘ + W` | Close the current tab                                 |
+| `Escape`     | Close dialogs; cancels loading when no dialog is open |
+
 ## Export Formats
 
 | Format     | Best For                                                             |
@@ -128,6 +205,18 @@ Structure Insight is built for modern browsers.
 - Other modern browsers can still use file input and drag-and-drop flows where supported.
 - PWA installation and offline behavior depend on each browser's service worker support.
 - Very large repositories are limited by browser memory, storage, and file-access constraints.
+
+## Processing Details
+
+- Text extraction uses browser file APIs and worker-friendly processing paths.
+- Processing yields back to the browser periodically, which keeps the UI responsive during larger imports.
+- File contents are sorted by path before export.
+- The display root name is inferred from the imported folder when there is a single top-level directory.
+- Manual in-app edits are merged into rebuilt exports so refresh/export behavior keeps user adjustments where possible.
+- Deleted files are tracked as removed paths so they stay out of the generated export.
+- Excluded files remain visible in the app state but are omitted from export content.
+- Empty directories are included only when the setting is enabled and the directories pass the active filters.
+- Security scanning runs on extracted and transformed export content, so options like Base64 truncation or empty-line removal can affect the final warning list.
 
 ## Development
 
@@ -197,6 +286,27 @@ Use include patterns, ignore patterns, manual exclusion, or the split export set
 ### Security findings appear in generated output
 
 Review each finding before sharing the export. The scanner is intentionally conservative and does not replace a full secret-scanning workflow.
+
+### A `.zip` file inside a folder is not expanded
+
+This is intentional. Only standalone `.zip` imports are expanded. Archives nested inside imported folders are kept as files to avoid unexpectedly expanding dependency caches or bundled artifacts.
+
+### Pattern filters do not match as expected
+
+Use comma-separated glob patterns, not newline-separated patterns. Try matching without the top-level folder name first, for example `src/**` instead of `my-project/src/**`.
+
+## Roadmap Notes
+
+The current product is a Web app. It does not yet ship a CLI, MCP server, or Claude Code Skill.
+
+A future agent-facing integration would likely be built in layers:
+
+1. Extract a headless core for project reading, filtering, tree generation, token estimation, secret scanning, and export generation.
+2. Wrap that core in a CLI for local automation.
+3. Expose stable MCP tools such as `analyze_project`, `export_context`, and `scan_secrets`.
+4. Add a Claude Code Skill as workflow guidance on top of the CLI/MCP layer.
+
+Keeping the browser UI separate from the headless core would make automation easier to test and safer to evolve.
 
 ## Contributing
 
