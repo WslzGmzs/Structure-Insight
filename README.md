@@ -341,6 +341,12 @@ dist/                  生产构建输出目录
 - Marked 和 DOMPurify
 - React Virtuoso
 
+---
+
+## 友链
+
+- [Linux.do](https://linux.do/)：也称 L 站，是一个活跃的中文技术社区，围绕 AI、软件开发、资源分享与前沿资讯展开讨论；社区愿景是“新的理想型社区”，社区文化是“真诚、友善、团结、专业，共建你我引以为荣之社区”。
+
 ## 许可证
 
 Structure Insight 基于 [MIT License](./LICENSE) 发布。

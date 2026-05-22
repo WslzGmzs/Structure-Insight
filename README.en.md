@@ -341,6 +341,12 @@ Keeping the browser UI separate from the headless core would make automation eas
 - Marked and DOMPurify
 - React Virtuoso
 
+---
+
+## Related Community
+
+- [Linux.do](https://linux.do/): an active Chinese tech community focused on AI, software development, resource sharing, and frontier technology discussions. Its vision is "a new ideal community", and its community culture emphasizes sincerity, friendliness, unity, and professionalism.
+
 ## License
 
 Structure Insight is released under the [MIT License](./LICENSE).
