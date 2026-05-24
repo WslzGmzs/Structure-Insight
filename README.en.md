@@ -1,9 +1,4 @@
 # Structure Insight
-
-<p align="center">
-  <a href="./README.md">中文</a> | <a href="./README.en.md">English</a>
-</p>
-
 [![Version](https://img.shields.io/badge/version-5.4.0-blue.svg)](./package.json)
 [![Latest Release](https://img.shields.io/github/v/release/yeahhe365/Structure-Insight?label=release)](https://github.com/yeahhe365/Structure-Insight/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
@@ -12,6 +7,8 @@
 [![Vite](https://img.shields.io/badge/Vite-6.4-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
 [![PWA](https://img.shields.io/badge/PWA-ready-5A0FC8.svg)](./public/manifest.json)
 [![Live Demo](https://img.shields.io/badge/live-demo-2ea44f?logo=cloudflarepages&logoColor=white)](https://structure-insight-website.pages.dev/)
+
+English | [简体中文](./README.md)
 
 Structure Insight is a browser-first repository inspection and export tool for AI-assisted development. It helps you load a local project, understand its structure, filter the files that matter, review potential secrets, and export a clean codebase snapshot without uploading source files to a server.
 
@@ -133,11 +130,11 @@ The app operates on the current in-browser view. If you edit or remove files ins
 ### Export
 
 | Setting             | Details                                                                                                                |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | Export format       | Chooses `plain`, `markdown`, `xml`, or `json`.                                                                         |
 | File summary        | Adds repository-level metadata and usage notes near the top of the export.                                             |
 | Directory structure | Includes the generated tree in the export.                                                                             |
-| Show line numbers   | Prefixes exported file content as `line                                                                                | content`. Preview line numbers are unaffected. |
+| Show line numbers   | Prefixes exported file content as `line \| content`. Preview line numbers are unaffected.                              |
 | Remove empty lines  | Removes blank lines from exported file bodies before output is generated.                                              |
 | Truncate Base64     | Replaces long `data:*;base64,...` values with `data:[TRUNCATED_BASE64_DATA]`.                                          |
 | Split threshold     | `0` disables splitting. A positive character count saves files as `project.part1.ext`, `project.part2.ext`, and so on. |

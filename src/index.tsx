@@ -10,13 +10,13 @@ import { registerAppServiceWorker } from './services/pwa';
 
 // Configure marked for markdown rendering with syntax highlighting
 marked.setOptions({
-    gfm: true,
-    breaks: true,
+  gfm: true,
+  breaks: true,
 });
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
+  throw new Error('Could not find root element to mount to');
 }
 
 const root = ReactDOM.createRoot(rootElement);

@@ -25,7 +25,9 @@ const {
   saveRecentProjectHandleMock: vi.fn(() => Promise.resolve()),
   loadRecentProjectHandleMock: vi.fn<() => Promise<FileSystemDirectoryHandle | null>>(() => Promise.resolve(null)),
   deleteRecentProjectHandleMock: vi.fn(() => Promise.resolve()),
-  readDirectoryHandleMock: vi.fn<() => Promise<{ files: File[]; emptyDirectoryPaths: string[] }>>(() => Promise.resolve({ files: [], emptyDirectoryPaths: [] })),
+  readDirectoryHandleMock: vi.fn<() => Promise<{ files: File[]; emptyDirectoryPaths: string[] }>>(() =>
+    Promise.resolve({ files: [], emptyDirectoryPaths: [] })
+  ),
 }));
 
 vi.mock('../services/fileProcessingClient', () => ({
@@ -116,16 +118,18 @@ describe('useFileProcessing recent project flow', () => {
     expect(readDirectoryHandleMock).toHaveBeenCalledWith(directoryHandle, {
       skipDefaultIgnoredDirectories: false,
     });
-    expect(createFileProcessingTaskMock).toHaveBeenCalledWith(expect.objectContaining({
-      options: {
-        useDefaultIgnorePatterns: false,
-        useGitignorePatterns: false,
-        includePatterns: ['src/**/*.ts', 'docs/**'],
-        ignorePatterns: ['dist/**', '**/*.test.ts'],
-        includeEmptyDirectories: false,
-        emptyDirectoryPaths: [],
-      },
-    }));
+    expect(createFileProcessingTaskMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        options: {
+          useDefaultIgnorePatterns: false,
+          useGitignorePatterns: false,
+          includePatterns: ['src/**/*.ts', 'docs/**'],
+          ignorePatterns: ['dist/**', '**/*.test.ts'],
+          includeEmptyDirectories: false,
+          emptyDirectoryPaths: [],
+        },
+      })
+    );
     expect(saveRecentProjectHandleMock).toHaveBeenCalledWith('recent-project-id', directoryHandle);
     expect(onRememberProject).toHaveBeenCalledWith({
       id: 'recent-project-id',
@@ -334,9 +338,12 @@ describe('useFileProcessing recent project flow', () => {
     expect(readDirectoryHandleMock).toHaveBeenNthCalledWith(2, directoryHandle, {
       skipDefaultIgnoredDirectories: true,
     });
-    expect(createFileProcessingTaskMock).toHaveBeenNthCalledWith(2, expect.objectContaining({
-      files: [secondFile],
-    }));
+    expect(createFileProcessingTaskMock).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        files: [secondFile],
+      })
+    );
     expect(result.current.processedData?.rootName).toBe('b.ts');
   });
 });

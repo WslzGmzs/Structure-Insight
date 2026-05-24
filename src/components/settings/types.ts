@@ -1,55 +1,62 @@
-import type { ExportFormat } from '../../services/exportBuilder';
+import type { ExportFormat } from '../../services/exportTypes';
 
 export type SettingsSectionId = 'workspace' | 'export' | 'about';
 
 export interface SettingsSectionDefinition {
-    id: SettingsSectionId;
-    label: string;
-    title: string;
-    icon: string;
+  id: SettingsSectionId;
+  label: string;
+  title: string;
+  icon: string;
+}
+
+export interface SettingsDialogValues {
+  exportFormat: ExportFormat;
+  exportHeaderText: string;
+  exportInstructionText: string;
+  exportSplitMaxChars: number;
+  extractContent: boolean;
+  fontSize: number;
+  ignorePatterns: string;
+  includeDirectoryStructure: boolean;
+  includeEmptyDirectories: boolean;
+  includeFileSummary: boolean;
+  includePatterns: string;
+  isDarkTheme: boolean;
+  maxCharsThreshold: number;
+  removeEmptyLines: boolean;
+  showLineNumbers: boolean;
+  truncateBase64: boolean;
+  useDefaultPatterns: boolean;
+  useGitignore: boolean;
+  wordWrap: boolean;
+}
+
+export interface SettingsDialogActions {
+  onClearCache: () => void;
+  onSetExportFormat: (value: ExportFormat) => void;
+  onSetExportHeaderText: (value: string) => void;
+  onSetExportInstructionText: (value: string) => void;
+  onSetExportSplitMaxChars: (value: number) => void;
+  onSetFontSize: (size: number) => void;
+  onSetIncludePatterns: (value: string) => void;
+  onSetIgnorePatterns: (value: string) => void;
+  onSetMaxCharsThreshold: (val: number) => void;
+  onToggleExtractContent: () => void;
+  onToggleIncludeDirectoryStructure: () => void;
+  onToggleIncludeEmptyDirectories: () => void;
+  onToggleIncludeFileSummary: () => void;
+  onToggleRemoveEmptyLines: () => void;
+  onToggleShowLineNumbers: () => void;
+  onToggleTheme: () => void;
+  onToggleTruncateBase64: () => void;
+  onToggleUseDefaultPatterns: () => void;
+  onToggleUseGitignore: () => void;
+  onToggleWordWrap: () => void;
 }
 
 export interface SettingsDialogProps {
-    isOpen: boolean;
-    onClose: () => void;
-    isDarkTheme: boolean;
-    onToggleTheme: () => void;
-    extractContent: boolean;
-    onToggleExtractContent: () => void;
-    fontSize: number;
-    onSetFontSize: (size: number) => void;
-    onClearCache: () => void;
-    maxCharsThreshold: number;
-    onSetMaxCharsThreshold: (val: number) => void;
-    wordWrap: boolean;
-    onToggleWordWrap: () => void;
-    includeFileSummary: boolean;
-    onToggleIncludeFileSummary: () => void;
-    includeDirectoryStructure: boolean;
-    onToggleIncludeDirectoryStructure: () => void;
-    exportFormat: ExportFormat;
-    onSetExportFormat: (value: ExportFormat) => void;
-    includePatterns: string;
-    onSetIncludePatterns: (value: string) => void;
-    ignorePatterns: string;
-    onSetIgnorePatterns: (value: string) => void;
-    useDefaultPatterns: boolean;
-    onToggleUseDefaultPatterns: () => void;
-    useGitignore: boolean;
-    onToggleUseGitignore: () => void;
-    includeEmptyDirectories: boolean;
-    onToggleIncludeEmptyDirectories: () => void;
-    showLineNumbers: boolean;
-    onToggleShowLineNumbers: () => void;
-    removeEmptyLines: boolean;
-    onToggleRemoveEmptyLines: () => void;
-    truncateBase64: boolean;
-    onToggleTruncateBase64: () => void;
-    exportSplitMaxChars: number;
-    onSetExportSplitMaxChars: (value: number) => void;
-    exportHeaderText: string;
-    onSetExportHeaderText: (value: string) => void;
-    exportInstructionText: string;
-    onSetExportInstructionText: (value: string) => void;
+  actions: SettingsDialogActions;
+  isOpen: boolean;
+  onClose: () => void;
+  values: SettingsDialogValues;
 }
-

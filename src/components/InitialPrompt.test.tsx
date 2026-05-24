@@ -5,11 +5,7 @@ import InitialPrompt from './InitialPrompt';
 
 describe('InitialPrompt recent projects', () => {
   it('renders a richer product landing state with core capabilities', () => {
-    const { container } = render(
-      <InitialPrompt
-        onOpenFolder={vi.fn()}
-      />
-    );
+    const { container } = render(<InitialPrompt onOpenFolder={vi.fn()} />);
 
     expect(screen.getByText('将代码库整理为 AI 友好格式')).not.toBeNull();
     expect(screen.getByText('浏览器本地处理')).not.toBeNull();
@@ -46,11 +42,7 @@ describe('InitialPrompt recent projects', () => {
     };
 
     render(
-      <InitialPrompt
-        onOpenFolder={vi.fn()}
-        recentProjects={[project]}
-        onOpenRecentProject={onOpenRecentProject}
-      />
+      <InitialPrompt onOpenFolder={vi.fn()} recentProjects={[project]} onOpenRecentProject={onOpenRecentProject} />
     );
 
     fireEvent.click(screen.getByRole('button', { name: /demo-project/i }));

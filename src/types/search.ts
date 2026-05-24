@@ -5,11 +5,10 @@ export interface SearchOptions {
 }
 
 export interface SearchResultItem {
-    filePath: string;
-    startIndex: number;
-    length: number;
-    content: string;
-    line: number;
-    indexInFile: number;
+  filePath: string;
+  startIndex: number;
+  length: number;
+  content: string;
+  line: number;
+  indexInFile: number;
 }
-

@@ -32,9 +32,9 @@ export default defineConfig({
         manualChunks: {
           'file-tree-vendor': ['react-virtuoso'],
           'code-view-vendor': ['highlight.js/lib/common', 'marked', 'dompurify'],
-        }
-      }
-    }
+        },
+      },
+    },
   },
   worker: {
     format: 'es',
@@ -42,6 +42,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
-    }
-  }
+    },
+  },
 });

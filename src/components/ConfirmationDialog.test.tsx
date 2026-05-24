@@ -17,20 +17,15 @@ afterEach(() => {
 describe('ConfirmationDialog', () => {
   it('waits for async confirmation handlers before closing the dialog', async () => {
     let resolveConfirm: () => void = () => {};
-    const onConfirm = vi.fn(() => new Promise<void>((resolve) => {
-      resolveConfirm = resolve;
-    }));
+    const onConfirm = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveConfirm = resolve;
+        })
+    );
     const onClose = vi.fn();
 
-    render(
-      <ConfirmationDialog
-        isOpen
-        onClose={onClose}
-        onConfirm={onConfirm}
-        title="确认操作"
-        message="继续吗？"
-      />
-    );
+    render(<ConfirmationDialog isOpen onClose={onClose} onConfirm={onConfirm} title="确认操作" message="继续吗？" />);
 
     fireEvent.click(screen.getByRole('button', { name: '确认' }));
 
@@ -46,19 +41,16 @@ describe('ConfirmationDialog', () => {
 
   it('cannot be dismissed by Escape or backdrop clicks while async confirmation is running', async () => {
     let resolveConfirm: () => void = () => {};
-    const onConfirm = vi.fn(() => new Promise<void>((resolve) => {
-      resolveConfirm = resolve;
-    }));
+    const onConfirm = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveConfirm = resolve;
+        })
+    );
     const onClose = vi.fn();
 
     const { container } = render(
-      <ConfirmationDialog
-        isOpen
-        onClose={onClose}
-        onConfirm={onConfirm}
-        title="确认操作"
-        message="继续吗？"
-      />
+      <ConfirmationDialog isOpen onClose={onClose} onConfirm={onConfirm} title="确认操作" message="继续吗？" />
     );
 
     fireEvent.click(screen.getByRole('button', { name: '确认' }));

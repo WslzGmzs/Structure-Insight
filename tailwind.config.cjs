@@ -1,8 +1,5 @@
 module.exports = {
-  content: [
-    './index.html',
-    './src/**/*.{ts,tsx}',
-  ],
+  content: ['./index.html', './src/**/*.{ts,tsx}'],
   darkMode: 'class',
   theme: {
     extend: {
@@ -31,7 +28,7 @@ module.exports = {
         'dark-subtle-text': '#A9B7AF',
         'dark-border': '#2B3A33',
         'dark-header': '#16201C',
-        'primary': '#0F766E',
+        primary: '#0F766E',
         'primary-hover': '#0D9488',
         'primary-disabled': '#99F6E4',
         'light-hover': '#EFE8DA',

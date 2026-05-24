@@ -1,7 +1,7 @@
 import React from 'react';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import MainContent from './MainContent';
+import MainContent, { type MainContentHandlers, type MainContentState } from './MainContent';
 import type { ProcessedFiles } from '../types';
 import type { VisibleTreeRow } from './fileTreeRows';
 
@@ -30,7 +30,10 @@ vi.mock('./ScrollToTopButton', () => ({
 }));
 
 vi.mock('react-virtuoso', () => ({
-  Virtuoso: ({ data, itemContent }: {
+  Virtuoso: ({
+    data,
+    itemContent,
+  }: {
     data: VisibleTreeRow[];
     itemContent: (index: number, item: VisibleTreeRow) => React.ReactNode;
   }) => (
@@ -68,7 +71,7 @@ function createProcessedData(entries: Array<{ path: string; language?: string }>
   const rootNodes: TreeNode[] = [];
 
   const ensureDirectory = (children: TreeNode[], name: string, path: string): TreeNode => {
-    let existing = children.find(node => node.path === path && node.isDirectory);
+    let existing = children.find((node) => node.path === path && node.isDirectory);
     if (!existing) {
       existing = {
         name,
@@ -105,9 +108,9 @@ function createProcessedData(entries: Array<{ path: string; language?: string }>
 
   return {
     rootName: 'demo',
-    structureString: `demo\n${entries.map(entry => `└── ${entry.path}`).join('\n')}\n`,
+    structureString: `demo\n${entries.map((entry) => `└── ${entry.path}`).join('\n')}\n`,
     treeData: rootNodes,
-    fileContents: entries.map(entry => {
+    fileContents: entries.map((entry) => {
       const fileName = entry.path.split('/').pop() ?? entry.path;
       return {
         path: entry.path,
@@ -128,61 +131,63 @@ function createProcessedData(entries: Array<{ path: string; language?: string }>
 
 function createLogic(
   processedData: ProcessedFiles | null,
-  stateOverrides: Record<string, unknown> = {},
-  handlerOverrides: Record<string, unknown> = {}
-) {
-  return {
-    state: {
-      isMobile: false,
-      processedData,
-      mobileView: 'editor' as const,
-      activeView: 'structure' as const,
-      panelWidth: 30,
-      isDragging: false,
-      isLoading: false,
-      progressMessage: '',
-      lastProcessedFiles: processedData
-        ? [new File(['demo'], processedData.fileContents[0].path.split('/').pop() ?? 'demo.txt')]
-        : null,
-      selectedFilePath: null,
-      openFiles: [],
-      selectedFile: null,
-      editingPath: null,
-      markdownPreviewPaths: new Set<string>(),
-      fontSize: 14,
-      searchQuery: '',
-      searchOptions: { caseSensitive: false, useRegex: false, wholeWord: false },
-      activeMatchIndexInFile: null,
-      wordWrap: false,
-      recentProjects: [],
-      ...stateOverrides,
-    },
-    handlers: {
-      handleFileTreeSelect: vi.fn(),
-      handleDeleteFile: vi.fn(),
-      handleCopyPath: vi.fn(),
-      handleToggleExclude: vi.fn(),
-      handleDirDoubleClick: vi.fn(),
-      closeTab: vi.fn(),
-      handleFileSelect: vi.fn(),
-      handleSaveEdit: vi.fn(),
-      handleToggleMarkdownPreview: vi.fn(),
-      setEditingPath: vi.fn(),
-      setToastMessage: vi.fn(),
-      handleMobileViewToggle: vi.fn(),
-      handleMouseDownResize: vi.fn(),
-      ...handlerOverrides,
-    },
+  stateOverrides: Partial<MainContentState> = {},
+  handlerOverrides: Partial<MainContentHandlers> = {}
+): { state: MainContentState; handlers: MainContentHandlers } {
+  const state: MainContentState = {
+    isMobile: false,
+    processedData,
+    mobileView: 'editor',
+    activeView: 'structure',
+    panelWidth: 30,
+    isDragging: false,
+    isLoading: false,
+    progressMessage: '',
+    lastProcessedFiles: processedData
+      ? [new File(['demo'], processedData.fileContents[0].path.split('/').pop() ?? 'demo.txt')]
+      : null,
+    selectedFilePath: null,
+    openFiles: [],
+    selectedFile: null,
+    editingPath: null,
+    markdownPreviewPaths: new Set<string>(),
+    fontSize: 14,
+    searchQuery: '',
+    searchOptions: { caseSensitive: false, useRegex: false, wholeWord: false },
+    activeMatchIndexInFile: null,
+    wordWrap: false,
+    recentProjects: [],
+    ...stateOverrides,
   };
+  const handlers: MainContentHandlers = {
+    handleFileTreeSelect: vi.fn(),
+    handleDeleteFile: vi.fn(),
+    handleCopyPath: vi.fn(),
+    handleToggleExclude: vi.fn(),
+    closeTab: vi.fn(),
+    handleFileSelect: vi.fn(),
+    handleRecentProjectSelect: vi.fn(),
+    handleSaveEdit: vi.fn(),
+    handleToggleMarkdownPreview: vi.fn(),
+    setEditingPath: vi.fn(),
+    setToastMessage: vi.fn(),
+    handleMobileViewToggle: vi.fn(),
+    handleMouseDownResize: vi.fn(),
+    ...handlerOverrides,
+  };
+
+  return { state, handlers };
 }
 
 describe('MainContent', () => {
   it('renders the empty state without the desktop split-pane chrome when no project is loaded', () => {
     const codeViewRef = React.createRef<HTMLDivElement>();
     const leftPanelRef = React.createRef<HTMLDivElement>();
+    const mainContentProps = createLogic(null);
     const { container } = render(
       <MainContent
-        logic={createLogic(null) as never}
+        state={mainContentProps.state}
+        handlers={mainContentProps.handlers}
         codeViewRef={codeViewRef}
         leftPanelRef={leftPanelRef}
       />
@@ -195,9 +200,11 @@ describe('MainContent', () => {
   it('clears a stale extension filter without collapsing nested directories in the replacement tree', async () => {
     const codeViewRef = React.createRef<HTMLDivElement>();
     const leftPanelRef = React.createRef<HTMLDivElement>();
+    const initialProps = createLogic(createProcessedData([{ path: 'src/nested/app.ts', language: 'typescript' }]));
     const { rerender } = render(
       <MainContent
-        logic={createLogic(createProcessedData([{ path: 'src/nested/app.ts', language: 'typescript' }])) as never}
+        state={initialProps.state}
+        handlers={initialProps.handlers}
         codeViewRef={codeViewRef}
         leftPanelRef={leftPanelRef}
       />
@@ -208,9 +215,11 @@ describe('MainContent', () => {
       expect(screen.getByText('app.ts')).not.toBeNull();
     });
 
+    const nextProps = createLogic(createProcessedData([{ path: 'src/nested/notes.md', language: 'markdown' }]));
     rerender(
       <MainContent
-        logic={createLogic(createProcessedData([{ path: 'src/nested/notes.md', language: 'markdown' }])) as never}
+        state={nextProps.state}
+        handlers={nextProps.handlers}
         codeViewRef={codeViewRef}
         leftPanelRef={leftPanelRef}
       />
@@ -226,15 +235,17 @@ describe('MainContent', () => {
     const codeViewRef = React.createRef<HTMLDivElement>();
     const leftPanelRef = React.createRef<HTMLDivElement>();
     const processedData = createProcessedData([{ path: 'src/nested/app.ts', language: 'typescript' }]);
+    const mainContentProps = createLogic(processedData, {
+      activeView: 'structure',
+      selectedFilePath: 'src/nested/app.ts',
+      selectedFile: processedData.fileContents[0],
+      openFiles: ['src/nested/app.ts'],
+    });
 
     render(
       <MainContent
-        logic={createLogic(processedData, {
-          activeView: 'structure',
-          selectedFilePath: 'src/nested/app.ts',
-          selectedFile: processedData.fileContents[0],
-          openFiles: ['src/nested/app.ts'],
-        }) as never}
+        state={mainContentProps.state}
+        handlers={mainContentProps.handlers}
         codeViewRef={codeViewRef}
         leftPanelRef={leftPanelRef}
       />
@@ -251,15 +262,17 @@ describe('MainContent', () => {
       { path: 'src/app.ts', language: 'typescript' },
       { path: 'src/notes.md', language: 'markdown' },
     ]);
+    const mainContentProps = createLogic(processedData, {
+      activeView: 'code',
+      selectedFilePath: 'src/app.ts',
+      selectedFile: processedData.fileContents[0],
+      openFiles: ['src/app.ts'],
+    });
 
     render(
       <MainContent
-        logic={createLogic(processedData, {
-          activeView: 'code',
-          selectedFilePath: 'src/app.ts',
-          selectedFile: processedData.fileContents[0],
-          openFiles: ['src/app.ts'],
-        }) as never}
+        state={mainContentProps.state}
+        handlers={mainContentProps.handlers}
         codeViewRef={codeViewRef}
         leftPanelRef={leftPanelRef}
       />

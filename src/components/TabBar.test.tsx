@@ -6,12 +6,7 @@ import TabBar from './TabBar';
 describe('TabBar', () => {
   it('keeps the close affordance visible without hover-only styling in touch layouts', () => {
     render(
-      <TabBar
-        openFiles={['src/app.ts']}
-        selectedFilePath="src/app.ts"
-        onTabSelect={vi.fn()}
-        onCloseTab={vi.fn()}
-      />
+      <TabBar openFiles={['src/app.ts']} selectedFilePath="src/app.ts" onTabSelect={vi.fn()} onCloseTab={vi.fn()} />
     );
 
     const closeButton = screen.getByRole('button', { name: '关闭 src/app.ts' });

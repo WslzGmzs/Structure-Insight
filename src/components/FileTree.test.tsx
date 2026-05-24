@@ -231,7 +231,9 @@ describe('FileTree virtualization', () => {
     expect((screen.getByText('src').closest('[role="treeitem"]') as HTMLElement).style.paddingLeft).toBe('0rem');
     expect((screen.getByText('nested').closest('[role="treeitem"]') as HTMLElement).style.paddingLeft).toBe('1.25rem');
     expect((screen.getByText('deeper').closest('[role="treeitem"]') as HTMLElement).style.paddingLeft).toBe('2.5rem');
-    expect((screen.getByText('index.ts').closest('[role="treeitem"]') as HTMLElement).style.paddingLeft).toBe('3.75rem');
+    expect((screen.getByText('index.ts').closest('[role="treeitem"]') as HTMLElement).style.paddingLeft).toBe(
+      '3.75rem'
+    );
   });
 
   it('removes descendant rows when collapsing a directory', () => {

@@ -9,4 +9,3 @@ export interface SecurityFinding {
   line: number;
   column: number;
 }
-

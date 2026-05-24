@@ -29,7 +29,7 @@ const ScrollSlider: React.FC<ScrollSliderProps> = ({ scrollRef }) => {
     const newThumbHeight = Math.max(20, (clientHeight / scrollHeight) * trackHeight);
     const scrollableDist = scrollHeight - clientHeight;
     const newThumbPosition = scrollableDist > 0 ? (scrollTop / scrollableDist) * (trackHeight - newThumbHeight) : 0;
-    
+
     setThumbHeight(newThumbHeight);
     setThumbPosition(newThumbPosition);
   }, [scrollRef, isVisible]);
@@ -37,12 +37,12 @@ const ScrollSlider: React.FC<ScrollSliderProps> = ({ scrollRef }) => {
   useEffect(() => {
     const scrollEl = scrollRef.current;
     if (!scrollEl) return;
-    
+
     const handleScroll = () => {
-        if (animationFrameRef.current) {
-            cancelAnimationFrame(animationFrameRef.current);
-        }
-        animationFrameRef.current = requestAnimationFrame(updateSlider);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      animationFrameRef.current = requestAnimationFrame(updateSlider);
     };
 
     updateSlider();
@@ -50,16 +50,15 @@ const ScrollSlider: React.FC<ScrollSliderProps> = ({ scrollRef }) => {
     scrollEl.addEventListener('scroll', handleScroll, { passive: true });
     const resizeObserver = new ResizeObserver(handleScroll);
     resizeObserver.observe(scrollEl);
-    
+
     // Also observe children of the scrollable element
     const mutationObserver = new MutationObserver(handleScroll);
     mutationObserver.observe(scrollEl, { childList: true, subtree: true });
 
-
-    if(trackRef.current) {
-        resizeObserver.observe(trackRef.current);
+    if (trackRef.current) {
+      resizeObserver.observe(trackRef.current);
     }
-    
+
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -69,38 +68,41 @@ const ScrollSlider: React.FC<ScrollSliderProps> = ({ scrollRef }) => {
       mutationObserver.disconnect();
     };
   }, [scrollRef, updateSlider]);
-  
+
   const handleMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
   }, []);
-  
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isDragging || !trackRef.current || !scrollRef.current) return;
 
-    const trackRect = trackRef.current.getBoundingClientRect();
-    const newY = e.clientY - trackRect.top;
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isDragging || !trackRef.current || !scrollRef.current) return;
 
-    const trackHeight = trackRef.current.clientHeight;
-    const scrollEl = scrollRef.current;
-    const currentThumbHeight = Math.max(20, (scrollEl.clientHeight / scrollEl.scrollHeight) * trackHeight);
+      const trackRect = trackRef.current.getBoundingClientRect();
+      const newY = e.clientY - trackRect.top;
 
-    const newThumbPosition = Math.max(0, Math.min(newY - currentThumbHeight / 2, trackHeight - currentThumbHeight));
-    
-    const scrollableDist = trackHeight - currentThumbHeight;
-    if(scrollableDist <= 0) return;
+      const trackHeight = trackRef.current.clientHeight;
+      const scrollEl = scrollRef.current;
+      const currentThumbHeight = Math.max(20, (scrollEl.clientHeight / scrollEl.scrollHeight) * trackHeight);
 
-    const scrollPercentage = newThumbPosition / scrollableDist;
-    scrollEl.scrollTop = scrollPercentage * (scrollEl.scrollHeight - scrollEl.clientHeight);
-  }, [isDragging, scrollRef]);
+      const newThumbPosition = Math.max(0, Math.min(newY - currentThumbHeight / 2, trackHeight - currentThumbHeight));
+
+      const scrollableDist = trackHeight - currentThumbHeight;
+      if (scrollableDist <= 0) return;
+
+      const scrollPercentage = newThumbPosition / scrollableDist;
+      scrollEl.scrollTop = scrollPercentage * (scrollEl.scrollHeight - scrollEl.clientHeight);
+    },
+    [isDragging, scrollRef]
+  );
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
   }, []);
-  
+
   useEffect(() => {
-    if(isDragging) {
+    if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
       document.body.style.userSelect = 'none';
@@ -111,50 +113,49 @@ const ScrollSlider: React.FC<ScrollSliderProps> = ({ scrollRef }) => {
       document.removeEventListener('mouseup', handleMouseUp);
       document.body.style.userSelect = '';
       document.body.style.cursor = '';
-    }
+    };
   }, [isDragging, handleMouseMove, handleMouseUp]);
-  
-  const handleTrackMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target !== trackRef.current) return;
 
-    if (!trackRef.current || !scrollRef.current) return;
-    
-    const trackRect = trackRef.current.getBoundingClientRect();
-    const clickY = e.clientY - trackRect.top;
+  const handleTrackMouseDown = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.target !== trackRef.current) return;
 
-    const trackHeight = trackRef.current.clientHeight;
-    const scrollEl = scrollRef.current;
-    
-    const currentThumbHeight = (scrollEl.clientHeight / scrollEl.scrollHeight) * trackHeight;
-    const newThumbPosition = clickY - currentThumbHeight / 2;
-    
-    const scrollableDist = trackHeight - currentThumbHeight;
-    if(scrollableDist <= 0) return;
+      if (!trackRef.current || !scrollRef.current) return;
 
-    const scrollPercentage = newThumbPosition / scrollableDist;
-    
-    scrollEl.scrollTop = scrollPercentage * (scrollEl.scrollHeight - scrollEl.clientHeight);
-    
-    // Also initiate dragging from here for a better UX
-    handleMouseDown(e);
-  }, [scrollRef, handleMouseDown]);
+      const trackRect = trackRef.current.getBoundingClientRect();
+      const clickY = e.clientY - trackRect.top;
+
+      const trackHeight = trackRef.current.clientHeight;
+      const scrollEl = scrollRef.current;
+
+      const currentThumbHeight = (scrollEl.clientHeight / scrollEl.scrollHeight) * trackHeight;
+      const newThumbPosition = clickY - currentThumbHeight / 2;
+
+      const scrollableDist = trackHeight - currentThumbHeight;
+      if (scrollableDist <= 0) return;
+
+      const scrollPercentage = newThumbPosition / scrollableDist;
+
+      scrollEl.scrollTop = scrollPercentage * (scrollEl.scrollHeight - scrollEl.clientHeight);
+
+      // Also initiate dragging from here for a better UX
+      handleMouseDown(e);
+    },
+    [scrollRef, handleMouseDown]
+  );
 
   if (!isVisible) {
     return null;
   }
 
   return (
-    <div
-      ref={trackRef}
-      className="absolute top-0 right-0 h-full w-4 z-20 group"
-      onMouseDown={handleTrackMouseDown}
-    >
+    <div ref={trackRef} className="absolute top-0 right-0 h-full w-4 z-20 group" onMouseDown={handleTrackMouseDown}>
       <div
         className="absolute w-2 left-1/2 -translate-x-1/2 bg-light-subtle-text/40 dark:bg-dark-subtle-text/40 rounded-full transition-colors group-hover:bg-light-subtle-text/50 dark:group-hover:bg-dark-subtle-text/50"
         style={{
-            height: `${thumbHeight}px`,
-            top: `${thumbPosition}px`,
-            cursor: 'grab',
+          height: `${thumbHeight}px`,
+          top: `${thumbPosition}px`,
+          cursor: 'grab',
         }}
         onMouseDown={handleMouseDown}
       />

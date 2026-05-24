@@ -130,6 +130,6 @@ describe('App drag overlay handling', () => {
     fireEvent.dragEnter(child, dragData);
     fireEvent.dragLeave(child, dragData);
 
-    expect(setIsDragging.mock.calls.map(call => call[0])).toEqual([true, true]);
+    expect(setIsDragging.mock.calls.map((call) => call[0])).toEqual([true, true]);
   });
 });

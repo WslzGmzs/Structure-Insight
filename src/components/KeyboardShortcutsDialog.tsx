@@ -1,82 +1,79 @@
 import React from 'react';
 
 interface KeyboardShortcutsDialogProps {
-    isOpen: boolean;
-    onClose: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 function getShortcutModifier(): string {
-    if (typeof navigator === 'undefined') return 'Ctrl';
-    return /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? '⌘' : 'Ctrl';
+  if (typeof navigator === 'undefined') return 'Ctrl';
+  return /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? '⌘' : 'Ctrl';
 }
 
 const KeyboardShortcutsDialog: React.FC<KeyboardShortcutsDialogProps> = ({ isOpen, onClose }) => {
-    const modifierKey = getShortcutModifier();
-    const shortcuts = [
-        { keys: [modifierKey, 'O'], description: '打开项目' },
-        { keys: [modifierKey, 'F'], description: '在文件中查找' },
-        { keys: [modifierKey, 'S'], description: '保存为文本' },
-        { keys: ['Escape'], description: '关闭对话框' },
-        { keys: [modifierKey, '/'], description: '显示快捷键帮助' },
-        { keys: [modifierKey, 'W'], description: '关闭当前标签页' },
-    ];
+  const modifierKey = getShortcutModifier();
+  const shortcuts = [
+    { keys: [modifierKey, 'O'], description: '打开项目' },
+    { keys: [modifierKey, 'F'], description: '在文件中查找' },
+    { keys: [modifierKey, 'S'], description: '保存为文本' },
+    { keys: ['Escape'], description: '关闭对话框' },
+    { keys: [modifierKey, '/'], description: '显示快捷键帮助' },
+    { keys: [modifierKey, 'W'], description: '关闭当前标签页' },
+  ];
 
-    React.useEffect(() => {
-        if (isOpen) {
-            const handleKeyDown = (e: KeyboardEvent) => {
-                if (e.key === 'Escape') onClose();
-            };
-            window.addEventListener('keydown', handleKeyDown);
-            return () => window.removeEventListener('keydown', handleKeyDown);
-        }
-    }, [isOpen, onClose]);
+  React.useEffect(() => {
+    if (isOpen) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') onClose();
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isOpen, onClose]);
 
-    if (!isOpen) return null;
+  if (!isOpen) return null;
 
-    return (
-        <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
+      <div
+        className="bg-light-panel dark:bg-dark-panel rounded-xl shadow-2xl border border-light-border dark:border-dark-border w-full max-w-sm overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-light-border dark:border-dark-border bg-light-bg/50 dark:bg-dark-bg/50">
+          <h3 className="font-bold text-lg text-light-text dark:text-dark-text">键盘快捷键</h3>
+          <button
             onClick={onClose}
-        >
-            <div
-                className="bg-light-panel dark:bg-dark-panel rounded-xl shadow-2xl border border-light-border dark:border-dark-border w-full max-w-sm overflow-hidden"
-                onClick={(e) => e.stopPropagation()}
-            >
-                <div className="flex items-center justify-between px-6 py-4 border-b border-light-border dark:border-dark-border bg-light-bg/50 dark:bg-dark-bg/50">
-                    <h3 className="font-bold text-lg text-light-text dark:text-dark-text">键盘快捷键</h3>
-                    <button
-                        onClick={onClose}
-                        aria-label="关闭快捷键帮助"
-                        className="w-8 h-8 rounded-full hover:bg-light-border dark:hover:bg-dark-border flex items-center justify-center text-light-subtle-text dark:text-dark-subtle-text transition-colors"
-                    >
-                        <i className="fa-solid fa-times"></i>
-                    </button>
-                </div>
-
-                <div className="p-6">
-                    <div className="grid gap-3">
-                        {shortcuts.map(({ keys, description }) => (
-                            <div key={description} className="flex items-center justify-between py-1.5">
-                                <span className="text-sm text-light-text dark:text-dark-text">{description}</span>
-                                <div className="flex items-center gap-1">
-                                    {keys.map((key, i) => (
-                                        <React.Fragment key={key}>
-                                            <kbd className="px-2 py-1 text-xs font-mono font-medium rounded-md bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-subtle-text dark:text-dark-subtle-text shadow-sm">
-                                                {key}
-                                            </kbd>
-                                            {i < keys.length - 1 && (
-                                                <span className="text-xs text-light-subtle-text dark:text-dark-subtle-text">+</span>
-                                            )}
-                                        </React.Fragment>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
+            aria-label="关闭快捷键帮助"
+            className="w-8 h-8 rounded-full hover:bg-light-border dark:hover:bg-dark-border flex items-center justify-center text-light-subtle-text dark:text-dark-subtle-text transition-colors"
+          >
+            <i className="fa-solid fa-times"></i>
+          </button>
         </div>
-    );
+
+        <div className="p-6">
+          <div className="grid gap-3">
+            {shortcuts.map(({ keys, description }) => (
+              <div key={description} className="flex items-center justify-between py-1.5">
+                <span className="text-sm text-light-text dark:text-dark-text">{description}</span>
+                <div className="flex items-center gap-1">
+                  {keys.map((key, i) => (
+                    <React.Fragment key={key}>
+                      <kbd className="px-2 py-1 text-xs font-mono font-medium rounded-md bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-subtle-text dark:text-dark-subtle-text shadow-sm">
+                        {key}
+                      </kbd>
+                      {i < keys.length - 1 && (
+                        <span className="text-xs text-light-subtle-text dark:text-dark-subtle-text">+</span>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default React.memo(KeyboardShortcutsDialog);

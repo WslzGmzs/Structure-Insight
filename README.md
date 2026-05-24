@@ -1,9 +1,5 @@
 # Structure Insight
 
-<p align="center">
-  <a href="./README.md">中文</a> | <a href="./README.en.md">English</a>
-</p>
-
 [![版本](https://img.shields.io/badge/version-5.4.0-blue.svg)](./package.json)
 [![最新发布](https://img.shields.io/github/v/release/yeahhe365/Structure-Insight?label=release)](https://github.com/yeahhe365/Structure-Insight/releases)
 [![许可证：MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
@@ -12,6 +8,8 @@
 [![Vite](https://img.shields.io/badge/Vite-6.4-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
 [![PWA](https://img.shields.io/badge/PWA-ready-5A0FC8.svg)](./public/manifest.json)
 [![在线体验](https://img.shields.io/badge/live-demo-2ea44f?logo=cloudflarepages&logoColor=white)](https://structure-insight-website.pages.dev/)
+
+[English](./README.en.md) | 简体中文
 
 Structure Insight 是一个优先在浏览器本地运行的代码仓库检查与导出工具。它可以帮助你加载本地项目、理解目录结构、筛选关键文件、检查潜在敏感信息，并在不把源代码上传到服务器的前提下生成干净的代码上下文快照。
 
@@ -132,16 +130,16 @@ npm run preview
 
 ### 导出
 
-| 设置项           | 说明                                                                                           |
-| ---------------- | ---------------------------------------------------------------------------------------------- | -------------------------------- |
-| 导出格式         | 选择 `plain`、`markdown`、`xml` 或 `json`。                                                    |
-| 文件摘要         | 在导出开头加入仓库级元数据和使用说明。                                                         |
-| 目录结构         | 在导出中包含生成的目录树。                                                                     |
-| 导出时显示行号   | 将文件正文导出为 `行号                                                                         | 内容` 的形式；不影响预览区行号。 |
-| 移除空行         | 生成输出前移除文件正文中的空白行。                                                             |
-| 截断 Base64      | 将较长的 `data:*;base64,...` 替换为 `data:[TRUNCATED_BASE64_DATA]`。                           |
-| 拆分阈值         | `0` 表示不拆分。设置为正数字符数后，会保存为 `project.part1.ext`、`project.part2.ext` 等文件。 |
-| Header 文本      | 放置项目背景、审查目标或外部限制，会追加到导出内容前部。                                       |
+| 设置项         | 说明                                                                                           |
+| -------------- | ---------------------------------------------------------------------------------------------- |
+| 导出格式       | 选择 `plain`、`markdown`、`xml` 或 `json`。                                                    |
+| 文件摘要       | 在导出开头加入仓库级元数据和使用说明。                                                         |
+| 目录结构       | 在导出中包含生成的目录树。                                                                     |
+| 导出时显示行号 | 将文件正文导出为 `行号 \| 内容` 的形式；不影响预览区行号。                                     |
+| 移除空行       | 生成输出前移除文件正文中的空白行。                                                             |
+| 截断 Base64    | 将较长的 `data:*;base64,...` 替换为 `data:[TRUNCATED_BASE64_DATA]`。                           |
+| 拆分阈值       | `0` 表示不拆分。设置为正数字符数后，会保存为 `project.part1.ext`、`project.part2.ext` 等文件。 |
+| Header 文本    | 放置项目背景、审查目标或外部限制，会追加到导出内容前部。                                       |
 | Instruction 文本 | 放置下游指令，例如希望 AI 使用的回答格式或审查优先级。                                         |
 
 ### 默认值
@@ -348,5 +346,4 @@ dist/                  生产构建输出目录
 - [Linux.do](https://linux.do/)：也称 L 站，是一个活跃的中文技术社区，围绕 AI、软件开发、资源分享与前沿资讯展开讨论；社区愿景是“新的理想型社区”，社区文化是“真诚、友善、团结、专业，共建你我引以为荣之社区”。
 
 ## 许可证
-
 Structure Insight 基于 [MIT License](./LICENSE) 发布。

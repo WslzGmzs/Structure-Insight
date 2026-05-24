@@ -28,24 +28,23 @@ export interface FileContent {
 }
 
 export interface AnalysisSummary {
-    totalEstimatedTokens: number;
-    securityFindingCount: number;
-    scannedFileCount: number;
+  totalEstimatedTokens: number;
+  securityFindingCount: number;
+  scannedFileCount: number;
 }
 
 export interface ProcessedFiles {
-    treeData: FileNode[];
-    fileContents: FileContent[];
-    structureString: string;
-    rootName: string;
-    emptyDirectoryPaths?: string[];
-    removedPaths?: string[];
-    analysisSummary?: AnalysisSummary;
-    securityFindings?: SecurityFinding[];
-    exportMetadata?: {
-      usesDefaultIgnorePatterns: boolean;
-      usesGitignorePatterns: boolean;
-      sortsByGitChangeCount: boolean;
-    };
+  treeData: FileNode[];
+  fileContents: FileContent[];
+  structureString: string;
+  rootName: string;
+  emptyDirectoryPaths?: string[];
+  removedPaths?: string[];
+  analysisSummary?: AnalysisSummary;
+  securityFindings?: SecurityFinding[];
+  exportMetadata?: {
+    usesDefaultIgnorePatterns: boolean;
+    usesGitignorePatterns: boolean;
+    sortsByGitChangeCount: boolean;
+  };
 }
-

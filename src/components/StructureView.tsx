@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { copyTextToClipboard } from '../services/clipboard';
 
@@ -10,34 +9,37 @@ interface StructureViewProps {
 
 const StructureView: React.FC<StructureViewProps> = ({ structureString, fontSize, onShowToast }) => {
   const handleCopy = () => {
-    void copyTextToClipboard(structureString).then(copied => {
+    void copyTextToClipboard(structureString).then((copied) => {
       onShowToast(copied ? '项目结构已复制' : '复制失败，请检查剪贴板权限');
     });
   };
 
   return (
     <div className="h-full p-4 md:p-6 bg-light-bg dark:bg-dark-bg min-h-min">
-        <div className="bg-light-panel dark:bg-dark-panel rounded-lg overflow-hidden border border-light-border dark:border-dark-border">
-             <div className="flex justify-between items-center p-3 bg-light-header/80 dark:bg-dark-header/80 border-b border-light-border dark:border-dark-border sticky top-0 z-[1]">
-                <div className="font-mono text-sm text-light-text dark:text-dark-text font-semibold flex items-center">
-                  <i className="fa-solid fa-sitemap mr-2 text-light-subtle-text dark:text-dark-subtle-text"></i>
-                  项目结构
-                </div>
-                <button 
-                    onClick={handleCopy}
-                    aria-label="复制项目结构"
-                    className="w-8 h-8 rounded-md hover:bg-light-border dark:hover:bg-dark-border flex items-center justify-center text-light-subtle-text dark:text-dark-subtle-text hover:text-primary transition-colors"
-                    title="复制结构"
-                >
-                    <i className="fa-solid fa-copy"></i>
-                </button>
-            </div>
-            <div className="p-4 bg-light-bg dark:bg-dark-bg overflow-x-auto">
-                <pre className="font-mono text-light-text dark:text-dark-text whitespace-pre" style={{ fontSize: `${fontSize}px`, lineHeight: '1.5' }}>
-                    {structureString}
-                </pre>
-            </div>
+      <div className="bg-light-panel dark:bg-dark-panel rounded-lg overflow-hidden border border-light-border dark:border-dark-border">
+        <div className="flex justify-between items-center p-3 bg-light-header/80 dark:bg-dark-header/80 border-b border-light-border dark:border-dark-border sticky top-0 z-[1]">
+          <div className="font-mono text-sm text-light-text dark:text-dark-text font-semibold flex items-center">
+            <i className="fa-solid fa-sitemap mr-2 text-light-subtle-text dark:text-dark-subtle-text"></i>
+            项目结构
+          </div>
+          <button
+            onClick={handleCopy}
+            aria-label="复制项目结构"
+            className="w-8 h-8 rounded-md hover:bg-light-border dark:hover:bg-dark-border flex items-center justify-center text-light-subtle-text dark:text-dark-subtle-text hover:text-primary transition-colors"
+            title="复制结构"
+          >
+            <i className="fa-solid fa-copy"></i>
+          </button>
         </div>
+        <div className="p-4 bg-light-bg dark:bg-dark-bg overflow-x-auto">
+          <pre
+            className="font-mono text-light-text dark:text-dark-text whitespace-pre"
+            style={{ fontSize: `${fontSize}px`, lineHeight: '1.5' }}
+          >
+            {structureString}
+          </pre>
+        </div>
+      </div>
     </div>
   );
 };

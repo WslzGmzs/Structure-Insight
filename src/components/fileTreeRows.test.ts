@@ -42,9 +42,9 @@ describe('fileTreeRows helpers', () => {
     const collapsed = flattenVisibleTreeRows(TREE, new Set(), null, null);
     const expanded = flattenVisibleTreeRows(TREE, new Set(['src', 'src/nested']), 'src/index.ts', 'src/nested');
 
-    expect(collapsed.map(row => row.path)).toEqual(['src']);
-    expect(expanded.map(row => row.path)).toEqual(['src', 'src/nested', 'src/nested/deep.ts', 'src/index.ts']);
-    expect(expanded.find(row => row.path === 'src/index.ts')?.isSelected).toBe(true);
-    expect(expanded.find(row => row.path === 'src/nested')?.isFocused).toBe(true);
+    expect(collapsed.map((row) => row.path)).toEqual(['src']);
+    expect(expanded.map((row) => row.path)).toEqual(['src', 'src/nested', 'src/nested/deep.ts', 'src/index.ts']);
+    expect(expanded.find((row) => row.path === 'src/index.ts')?.isSelected).toBe(true);
+    expect(expanded.find((row) => row.path === 'src/nested')?.isFocused).toBe(true);
   });
 });
